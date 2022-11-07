@@ -9,7 +9,7 @@ import random
 import doctest
 
 
-def generate_grid() -> list[list[str]]:
+def generate_grid() -> list[str]:
     """
     Generate a grid of 5 unique ukrainian letters
 
@@ -49,7 +49,7 @@ def get_words(file: str, letters: list) -> list[tuple[str, str]]:
     Doctests
     --------
     """
-    with open(file, encoding="utf-8") as dictionary:
+    with open(file, 'r', encoding="utf-8") as dictionary:
         words = dictionary.read().splitlines()
         valid_words = []
         for word in words:
@@ -121,6 +121,7 @@ def check_user_words(user_words: list[str], language_part: str, letters: list[st
     valid_words = []
     forgotten_words = []
     for word in user_words:
+        word = word.lower()
         if word[0] in letters and word in dict_of_words\
                 and dict_of_words[word] == language_part:
             valid_words.append(word)
@@ -148,33 +149,33 @@ def get_user_words() -> list:
     True
     """
     user_words = []
-    while True:
-        try:
+    try:
+        while True:
             user_words.append(input("Enter a word: "))
-        except EOFError:
-            return user_words
+    except EOFError:
+        print()
+        return user_words
+
+
+def result():
+    '''
+    Launch the game
+    '''
+    grid = generate_grid()
+    language_part = random.choice(['noun', 'verb', 'adjective', 'adverb'])
+    print(' '.join(grid), language_part)
+    words = get_words('base.lst', grid)
+    dict_of_words = _get_words_to_dict(words)
+    user_words = get_user_words()
+    print(check_user_words(user_words, language_part, grid, dict_of_words))
 
 
 def main():
     """
-    The main function
+    The main function to run doctests and program itself
     """
-    grid = generate_grid()
-    print(' '.join(grid))
-    language_part = random.choice(['noun', 'verb', 'adjective', 'adverb'])
-    print(f'Enter {language_part}s:')
-    words = get_words('base.lst', grid)
-    dict_of_words = _get_words_to_dict(words)
-    user_words = get_user_words()
-    valid_words, forgotten_words = check_user_words(user_words, language_part,
-                                                    grid, dict_of_words)
-    print()
-    print('Valid words:')
-    for i in valid_words:
-        print(f'  {i}')
-    print('Forgotten words:')
-    for i in forgotten_words:
-        print(f'  {i}')
+    print(doctest.testmod())
+    result()
 
 
 if __name__ == '__main__':
