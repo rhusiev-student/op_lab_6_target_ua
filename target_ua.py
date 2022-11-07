@@ -62,3 +62,23 @@ def get_words(file: str, letters: list) -> list[tuple[str, str]]:
             if len(word) <= 5 and word[0] in letters and language_part != 'other':
                 valid_words.append((word, language_part))
         return valid_words
+
+
+def _get_words_to_dict(words: list[tuple[str, str]]) -> dict[str, str]:
+    """
+    Get a dictionary of words and their part of language
+
+    Parameters
+    ----------
+    words : list
+        The words, got from the get_words function
+
+    Returns
+    -------
+    dict
+        The dictionary of words
+    """
+    dict_of_words = {}
+    for word in words:
+        dict_of_words[word[0]] = word[1]
+    return dict_of_words
