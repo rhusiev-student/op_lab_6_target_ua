@@ -82,3 +82,59 @@ def _get_words_to_dict(words: list[tuple[str, str]]) -> dict[str, str]:
     for word in words:
         dict_of_words[word[0]] = word[1]
     return dict_of_words
+
+
+def check_user_words(user_words: list[str], language_part: str, letters: list[str],
+                     dict_of_words: dict) -> tuple[list[str], list[str]]:
+    """
+    Check if the user's words are valid
+
+    Parameters
+    ----------
+    user_words : list
+        The user's words
+    language_part : str
+        The part of language to check
+    letters : list
+        The letters to use
+    dict_of_words : dict
+        The dictionary of words
+
+    Returns
+    -------
+    list
+        The valid words
+    """
+    valid_words = []
+    invalid_words = []
+    for word in user_words:
+        if word[0] in letters and word in dict_of_words\
+                and dict_of_words[word] == language_part:
+            valid_words.append(word)
+        else:
+            invalid_words.append(word)
+    return valid_words, invalid_words
+
+
+def get_user_words():
+    """
+    Gets words from user input and returns a list with these words.
+    Usage: enter a word or press ctrl+d to finish for *nix or Ctrl-Z+Enter
+    for Windows.
+    Note: the user presses the enter key after entering each word.
+
+    Returns
+    -------
+    list
+        The words entered by the user
+    """
+    user_words = []
+    while True:
+        try:
+            user_words.append(input("Enter a word: "))
+        except EOFError:
+            return user_words
+
+
+def main():
+    pass
