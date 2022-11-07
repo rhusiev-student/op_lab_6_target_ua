@@ -47,7 +47,7 @@ def get_words(file: str, letters: list) -> list[tuple[str, str]]:
             word, language_part = word.split(' ')[0:2]
             if language_part[0] == '/':
                 language_part = language_part[1:]
-            if language_part[0] == 'n' and language_part[2] != 'n':
+            if language_part[0] == 'n' and not language_part[1:3] == 'no':
                 language_part = 'noun'
             elif language_part[0] == 'v':
                 language_part = 'verb'
@@ -58,7 +58,7 @@ def get_words(file: str, letters: list) -> list[tuple[str, str]]:
                     language_part = 'adverb'
             else:
                 language_part = 'other'
-            if len(word) <= 5 and word in letters and language_part != 'other':
+            if 0 < len(word) <= 5 and word[0] in letters and language_part != 'other':
                 valid_words.append((word, language_part))
         return valid_words
 
@@ -149,6 +149,7 @@ def main():
     user_words = get_user_words()
     valid_words, forgotten_words = check_user_words(user_words, language_part,
                                                     grid, dict_of_words)
+    print()
     print('Valid words:')
     for i in valid_words:
         print(f'  {i}')
