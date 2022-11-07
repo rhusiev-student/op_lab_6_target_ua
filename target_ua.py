@@ -6,6 +6,7 @@ A target game:
     - The user enters words until he enters ctrl+d
 """
 import random
+import doctest
 
 
 def generate_grid() -> list[list[str]]:
@@ -16,8 +17,13 @@ def generate_grid() -> list[list[str]]:
     -------
     list[str]
         The generated grid
+
+    Doctests
+    --------
+    >>> isinstance(generate_grid(), list)
+    True
     """
-    letters = "абвгґдеєжзиіїйклмнопрстуфхцчшщюя"
+    letters = "абвгґдеєжзиіїйклмнопрстуфхцчшщьюя"
     grid: list = random.sample(letters, 5)
     return grid
 
@@ -39,6 +45,9 @@ def get_words(file: str, letters: list) -> list[tuple[str, str]]:
     -------
     list
         The words that consist of these letters
+
+    Doctests
+    --------
     """
     with open(file, encoding="utf-8") as dictionary:
         words = dictionary.read().splitlines()
@@ -76,6 +85,11 @@ def _get_words_to_dict(words: list[tuple[str, str]]) -> dict[str, str]:
     -------
     dict
         The dictionary of words
+
+    Doctests
+    --------
+    >>> _get_words_to_dict([('слово', 'noun'), ('казати', 'verb')])
+    {'слово': 'noun', 'казати': 'verb'}
     """
     dict_of_words = {}
     for word in words:
@@ -116,7 +130,7 @@ def check_user_words(user_words: list[str], language_part: str, letters: list[st
     return valid_words, forgotten_words
 
 
-def get_user_words():
+def get_user_words() -> list:
     """
     Gets words from user input and returns a list with these words.
     Usage: enter a word or press ctrl+d to finish for *nix or Ctrl-Z+Enter
@@ -127,6 +141,11 @@ def get_user_words():
     -------
     list
         The words entered by the user
+
+    Doctests
+    --------
+    >>> isinstance(get_user_words(), list)
+    True
     """
     user_words = []
     while True:
