@@ -44,10 +44,10 @@ def get_words(file: str, letters: list) -> list[tuple[str, str]]:
         words = dictionary.read().splitlines()
         valid_words = []
         for word in words:
-            word, language_part = word.split(' ')
+            word, language_part = word.split(' ')[0:2]
             if language_part[0] == '/':
                 language_part = language_part[1:]
-            if language_part[0] == 'n' and word[1][2] != 'n':
+            if language_part[0] == 'n' and language_part[2] != 'n':
                 language_part = 'noun'
             elif language_part[0] == 'v':
                 language_part = 'verb'
@@ -58,8 +58,7 @@ def get_words(file: str, letters: list) -> list[tuple[str, str]]:
                     language_part = 'adverb'
             else:
                 language_part = 'other'
-            word = word[0]
-            if len(word) <= 5 and word[0] in letters and language_part != 'other':
+            if len(word) <= 5 and word in letters and language_part != 'other':
                 valid_words.append((word, language_part))
         return valid_words
 
@@ -106,14 +105,15 @@ def check_user_words(user_words: list[str], language_part: str, letters: list[st
         The valid words
     """
     valid_words = []
-    invalid_words = []
+    forgotten_words = []
     for word in user_words:
         if word[0] in letters and word in dict_of_words\
                 and dict_of_words[word] == language_part:
             valid_words.append(word)
-        else:
-            invalid_words.append(word)
-    return valid_words, invalid_words
+    for word in dict_of_words:
+        if word not in valid_words:
+            forgotten_words.append(word)
+    return valid_words, forgotten_words
 
 
 def get_user_words():
@@ -137,4 +137,25 @@ def get_user_words():
 
 
 def main():
-    pass
+    """
+    The main function
+    """
+    grid = generate_grid()
+    print(' '.join(grid))
+    language_part = random.choice(['noun', 'verb', 'adjective', 'adverb'])
+    print(f'Enter {language_part}s:')
+    words = get_words('base.lst', grid)
+    dict_of_words = _get_words_to_dict(words)
+    user_words = get_user_words()
+    valid_words, forgotten_words = check_user_words(user_words, language_part,
+                                                    grid, dict_of_words)
+    print('Valid words:')
+    for i in valid_words:
+        print(f'  {i}')
+    print('Forgotten words:')
+    for i in forgotten_words:
+        print(f'  {i}')
+
+
+if __name__ == '__main__':
+    main()
